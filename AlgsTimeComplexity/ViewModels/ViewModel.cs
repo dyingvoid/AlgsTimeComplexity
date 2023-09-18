@@ -89,7 +89,7 @@ public class ViewModel : ObservableObject
 
         for (var i = 0; i < size; i++)
         {
-            list.Add(random.Next(0, 1000000));
+            list.Add(random.Next(0, 1000));
         }
 
         return list;
