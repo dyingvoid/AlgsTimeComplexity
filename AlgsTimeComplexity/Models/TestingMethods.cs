@@ -104,4 +104,19 @@ public static class TestingMethods
 
         return cpList;
     }
+
+    public static TimeSpan Horner(List<int> list, int size)
+    {
+        double result = list[0];
+        var x = 1.5f;
+
+        var watch = Stopwatch.StartNew();
+        for (int i = 1; i < size; i++)
+        {
+            result = result * x + list[i];
+        }
+        watch.Stop();
+
+        return watch.Elapsed;
+    }
 }
