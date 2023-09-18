@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AlgsTimeComplexity.Models;
@@ -15,15 +16,19 @@ public class ViewModel : ObservableObject
     public RelayCommand CalculateCommand => 
         new RelayCommand(execute => CalculateParallel(2000));
     
-    public MethodInfo[] Methods { get; set; }= 
-        typeof(TestingMethods).GetMethods(BindingFlags.Public | BindingFlags.Static);
+    public List<MethodInfo> Methods { get; set; }
     
     public MethodInfo SelectedMethod { get; set; }
 
     public ViewModel()
     {
         TimePlot = new PlotModel<double>(new ObservableCollection<double>());
-        if (Methods.Length != 0)
+        Methods = typeof(TestingMethods).GetMethods(BindingFlags.Public | BindingFlags.Static).ToList();
+        Methods.AddRange(
+            typeof(TestingMatrixMethods).GetMethods(BindingFlags.Public | BindingFlags.Static)
+            );
+        
+        if (Methods.Count != 0)
             SelectedMethod = Methods[0];
     }
 
@@ -31,19 +36,19 @@ public class ViewModel : ObservableObject
     {
         if(TimePlot.List.Count != 0)
             TimePlot.List.Clear();
-        
-        var mainList = GenerateList(maxSize);
-        
+
         for (var size = 1; size < maxSize; size++)
         {
-            var list = GenerateList(size);
-            TimeSpan ts = TimeSpan.Zero;
             double ms = 0;
+
+            var param = SelectedMethod.DeclaringType == typeof(TestingMethods) 
+                ? new object?[] { GenerateArray(size), size } 
+                : new object?[] { GenerateMatrix(size), GenerateMatrix(size), size };
             
             Parallel.Invoke(
                 () =>
                 {
-                    ts = (TimeSpan)SelectedMethod.Invoke(null, new object?[] { list, size });
+                    TimeSpan ts = (TimeSpan)SelectedMethod.Invoke(null, param);
                     ms = ts.TotalMilliseconds;
                 }
             );
@@ -52,33 +57,6 @@ public class ViewModel : ObservableObject
         }
     }
 
-    private async void CalculateAsync(int maxSize)
-    {
-        if(TimePlot.List.Count != 0)
-            TimePlot.List.Clear();
-        
-        var mainList = GenerateList(maxSize);
-        
-        for (var size = 1; size < maxSize; size++)
-        {
-            var list = GenerateList(size);
-            TimeSpan ts = TimeSpan.Zero;
-            double ms = 0;
-            
-            await Task.Run(() =>
-                {
-                    ts = (TimeSpan)SelectedMethod.Invoke(null, new object?[] { list, size });
-                    ms = ts.TotalMilliseconds;
-                }
-            );
-
-            lock (TimePlot.Sync)
-            {
-                TimePlot.List.Add(ms);
-            }
-        }
-    }
-    
     private List<int> GenerateList(int size)
     {
         var list = new List<int>();
@@ -93,5 +71,26 @@ public class ViewModel : ObservableObject
         }
 
         return list;
+    }
+
+    private int[] GenerateArray(int size)
+    {
+        var arr = new int[size];
+        var random = new Random();
+
+        for (var i = 0; i < size; i++)
+            arr[i] = random.Next(0, 1000);
+
+        return arr;
+    }
+
+    private int[][] GenerateMatrix(int size)
+    {
+        var matrix = new int[size][];
+        
+        for(var i = 0; i < size; i++)
+            matrix[i] = GenerateArray(size);
+
+        return matrix;
     }
 }

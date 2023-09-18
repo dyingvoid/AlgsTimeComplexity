@@ -7,10 +7,10 @@ namespace AlgsTimeComplexity.Models;
 
 public static class TestingMethods
 {
-    public static TimeSpan Const(List<int> list, int size)
+    public static TimeSpan Const(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
-        if (list.Count != 0)
+        if (list.Length != 0)
         {
             var a = list[0];
         }
@@ -19,7 +19,7 @@ public static class TestingMethods
         return watch.Elapsed;
     }
     
-    public static TimeSpan Sum(List<int> list, int size)
+    public static TimeSpan Sum(int[] list, int size)
     {
         long sum = 0;
         var watch = Stopwatch.StartNew();
@@ -32,7 +32,7 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
-    public static TimeSpan Product(List<int> list, int size)
+    public static TimeSpan Product(int[] list, int size)
     {
         long sum = 0;
         var watch = Stopwatch.StartNew();
@@ -45,7 +45,7 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
-    public static TimeSpan BubbleSort(List<int> list, int size)
+    public static TimeSpan BubbleSort(int[] list, int size)
     {
         var cpList = new List<int>(list);
 
@@ -66,7 +66,7 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
-    public static TimeSpan QuickSort(List<int> list, int size)
+    public static TimeSpan QuickSort(int[] list, int size)
     {
 
         var watch = Stopwatch.StartNew();
@@ -76,37 +76,36 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
-    private static List<int> QuickSortArray(List<int> list, int lIndex, int rIndex)
+    private static int[] QuickSortArray(int[] list, int lIndex, int rIndex)
     {
-        var cpList = new List<int>(list);
         var i = lIndex;
         var j = rIndex;
-        var pivot = cpList[lIndex];
+        var pivot = list[lIndex];
 
         while (i <= j)
         {
-            while (cpList[i] < pivot)
+            while (list[i] < pivot)
                 i++;
-            while (cpList[j] > pivot)
+            while (list[j] > pivot)
                 j--;
 
             if (i <= j)
             {
-                (cpList[i], cpList[j]) = (cpList[j], cpList[i]);
+                (list[i], list[j]) = (list[j], list[i]);
                 i++;
                 j--;
             }
         }
 
         if (lIndex < j)
-            QuickSortArray(cpList, lIndex, j);
+            QuickSortArray(list, lIndex, j);
         if (i < rIndex)
-            QuickSortArray(cpList, i, rIndex);
+            QuickSortArray(list, i, rIndex);
 
-        return cpList;
+        return list;
     }
 
-    public static TimeSpan Horner(List<int> list, int size)
+    public static TimeSpan Horner(int[] list, int size)
     {
         double result = list[0];
         var x = 1.5f;
@@ -121,7 +120,7 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
-    public static TimeSpan SimplePow(List<int> list, int size)
+    public static TimeSpan SimplePow(int[] list, int size)
     {
         var element = list[size - 1];
         
@@ -135,7 +134,7 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
-    public static TimeSpan RecursivePow(List<int> list, int size)
+    public static TimeSpan RecursivePow(int[] list, int size)
     {
         var element = list[size - 1];
         var watch = Stopwatch.StartNew();
@@ -160,7 +159,7 @@ public static class TestingMethods
         return number * Recursive(number, power - 1);
     }
 
-    public static TimeSpan QuickPow(List<int> list, int size)
+    public static TimeSpan QuickPow(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
         Quick(list[size - 1], size);
@@ -185,7 +184,7 @@ public static class TestingMethods
         return f;
     }
 
-    public static TimeSpan QuickPow1(List<int> list, int size)
+    public static TimeSpan QuickPow1(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
         Quick1(list[size - 1], size);
