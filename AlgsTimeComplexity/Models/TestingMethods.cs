@@ -215,4 +215,145 @@ public static class TestingMethods
 
         return f;
     }
+
+    //не доделал
+    public static TimeSpan TimSort(List<int> list, int size)
+    {
+
+        var watch = Stopwatch.StartNew();
+        var result = TimSortArray(list);
+        watch.Stop();
+
+        return watch.Elapsed;
+    }
+    //не доделал
+    private static int CalcMinRun(int length)
+    {
+        int r = 0;
+        while (length >= 32)
+        {
+            r |= length & 1;
+            length >>= 1;
+        }
+        return length + r;
+    }
+
+    private static List<int> InsertionSortArray(List<int> list, int left, int right)
+    {
+        var cpList = new List<int>(list);
+        int temp;
+        for (int i = left + 1; i < right + 1; i++)
+        {
+            int j = i;
+            while (j > left && cpList[j] < cpList[j - 1])
+            {
+                temp = cpList[j];
+                cpList[j] = cpList[j - 1];
+                cpList[j - 1] = temp;
+                j--;
+            }
+        }
+        return cpList;
+    }
+    //не доделал
+    private static void Merge(List<int> list, int left, int middle, int right)
+    {
+        int len1 = middle - left + 1, len2 = right - middle, i;
+        int[] leftArr = new int[len1];
+        int[] rightArr = new int[len2];
+        for (i = 0; i < len1; i++)
+        {
+            leftArr[i] = list[left + i];
+        }
+        for (i = 0; i < len2; i++)
+        {
+            rightArr[i] = list[middle + 1 + i];
+        }
+
+        int j = 0, k = left;
+        i = 0;
+        while (i < len1 && j < len2)
+        {
+            if (leftArr[i] <= rightArr[j])
+            {
+                list[k] = leftArr[i];
+                i++;
+            }
+            else
+            {
+                list[k] = rightArr[j];
+                j++;
+            }
+
+            k++;
+        }
+        while (i < len1)
+        {
+            list[k] = leftArr[i];
+            k++;
+            i++;
+        }
+        while (j < len2)
+        {
+            list[k] = rightArr[j];
+            k++;
+            j++;
+        }
+    }
+    //не доделал
+    private static List<int> TimSortArray(List<int> list)
+    {
+        var cpList = new List<int>(list);
+        int minRun = CalcMinRun(cpList.Count);
+
+        for (int start = 0; start < cpList.Count; start += minRun)
+        {
+            int end = Math.Min(start + minRun - 1, cpList.Count - 1);
+            InsertionSortArray(cpList, start, end);
+        }
+
+        int size = minRun;
+
+        while (size < cpList.Count)
+        {
+            for (int left = 0; left < cpList.Count; left += 2 * size)
+            {
+                int middle = Math.Min(cpList.Count - 1, left + size - 1);
+                int right = Math.Min(left + 2 * size - 1, cpList.Count - 1);
+                if (middle < right)
+                {
+                    Merge(cpList, left, middle, right);
+                }
+            }
+
+            size *= 2;
+        }
+
+        return cpList;
+    }
+
+    public static TimeSpan InsertionSort(List<int> list, int size)
+    {
+        var watch = Stopwatch.StartNew();
+        var result = InsertionSortArray(list, 0, size - 1);
+        watch.Stop();
+
+        return watch.Elapsed;
+    }
+
+    public static TimeSpan LinearSearch(List<int> list, int size)
+    {
+        var cpList = new List<int>(list);
+        Random random = new();
+        int searchValue = random.Next(0, 100);
+        int index = default;
+
+        var watch = Stopwatch.StartNew();
+        for (int i = 0; i < cpList.Count; i++)
+        {
+            if (cpList[i] == searchValue)
+                index = i;
+        }
+        return watch.Elapsed;
+    }
 }
