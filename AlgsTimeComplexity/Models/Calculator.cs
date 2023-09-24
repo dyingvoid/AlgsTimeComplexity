@@ -7,22 +7,44 @@ namespace AlgsTimeComplexity.Models;
 
 public class Calculator
 {
-    public void Calculate(int size, MethodInfo methodInfo, ObservableCollection<double> plot)
+    public void Calculate(int size, double time, 
+        MethodInfo testMethod, MethodInfo approximationMethod, PlotModel<double> plot)
     {
-        if (plot.Count != 0)
-            plot.Clear();
+        if (plot.List.Count != 0 || plot.Approximation.Count != 0)
+        {
+            plot.List.Clear();
+            plot.Approximation.Clear();
+        }
+            
+        CalculateExperimentTime(size, testMethod, plot.List);
+        CalculateApproximation(size, time, approximationMethod, plot.Approximation);
+    }
 
+    private void CalculateApproximation(int size, double time, 
+        MethodInfo complexity, ObservableCollection<double> complexityPlot)
+    {
+        for (var i = 1; i < size; i++)
+        {
+            var timeApproximation = (double)complexity.Invoke(null, new object[] { time, i });
+            complexityPlot.Add(timeApproximation);
+        }
+    }
+
+    private async void CalculateExperimentTime(int size, MethodInfo methodInfo, ObservableCollection<double> plot)
+    {
         var parameters = GenerateParameters(methodInfo, size);
 
         for (var i = 0; i < size; i++)
         {
             var closureTemp = i;
+            TimeSpan timeSpan = TimeSpan.Zero;
 
-            Task.Run(() =>
+            await Task.Run(() =>
             {
-                var timeSpan = (TimeSpan)methodInfo.Invoke(null, (object[])parameters[closureTemp]);
-                plot.Add(timeSpan.TotalMilliseconds);
+                timeSpan = (TimeSpan)methodInfo.Invoke(null, (object[])parameters[closureTemp]);
             });
+            
+            plot.Add(timeSpan.TotalMilliseconds);
         }
     }
 
