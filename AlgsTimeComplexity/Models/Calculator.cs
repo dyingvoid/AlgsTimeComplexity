@@ -15,9 +15,11 @@ public class Calculator
             plot.List.Clear();
             plot.Approximation.Clear();
         }
-            
+
+        bool check = GC.TryStartNoGCRegion(Int32.MaxValue, true);
         CalculateExperimentTime(size, testMethod, plot.List);
         CalculateApproximation(size, time, approximationMethod, plot.Approximation);
+        GC.EndNoGCRegion();
     }
 
     private void CalculateApproximation(int size, double time, 
