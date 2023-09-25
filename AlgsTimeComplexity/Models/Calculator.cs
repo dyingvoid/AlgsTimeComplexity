@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -8,18 +11,20 @@ namespace AlgsTimeComplexity.Models;
 public class Calculator
 {
     public void Calculate(int size, double time, 
-        MethodInfo testMethod, MethodInfo approximationMethod, PlotModel<double> plot)
+        MethodInfo testMethod, MethodInfo approximationMethod, PlotModel<double> plot, bool maxPerformance)
     {
         if (plot.List.Count != 0 || plot.Approximation.Count != 0)
         {
             plot.List.Clear();
             plot.Approximation.Clear();
         }
-
-        bool check = GC.TryStartNoGCRegion(Int32.MaxValue, true);
-        CalculateExperimentTime(size, testMethod, plot.List);
+        
+        if(maxPerformance)
+            CalculateExperimentTimeParallel(size, testMethod, plot.List);
+        else
+            CalculateExperimentTime(size, testMethod, plot.List);
+        
         CalculateApproximation(size, time, approximationMethod, plot.Approximation);
-        GC.EndNoGCRegion();
     }
 
     private void CalculateApproximation(int size, double time, 
@@ -32,18 +37,40 @@ public class Calculator
         }
     }
 
-    private async void CalculateExperimentTime(int size, MethodInfo methodInfo, ObservableCollection<double> plot)
+    private async void CalculateExperimentTimeParallel(int size, MethodInfo methodInfo, ObservableCollection<double> plot)
     {
-        var parameters = GenerateParameters(methodInfo, size);
+        var parameters = Enumerable.Range(1, size);
 
+        IEnumerable<double> results = Partitioner
+            .Create(parameters, EnumerablePartitionerOptions.NoBuffering)
+            .AsParallel()
+            .AsOrdered()
+            .WithMergeOptions(ParallelMergeOptions.NotBuffered)
+            .Select(i =>
+            {
+                var param = GenerateParameters(methodInfo, i);
+                return ((TimeSpan)methodInfo.Invoke(null, param)).TotalMilliseconds;
+            })
+            .AsEnumerable();
+        
+        foreach(var result in results)
+        {
+            plot.Add(result);
+        }
+    }
+    
+    private async void CalculateExperimentTime(int size, MethodInfo methodInfo, 
+        ObservableCollection<double> plot)
+    {
         for (var i = 0; i < size; i++)
         {
             var closureTemp = i;
             TimeSpan timeSpan = TimeSpan.Zero;
-
+            var parameters = GenerateParameters(methodInfo, i);
+            
             await Task.Run(() =>
             {
-                timeSpan = (TimeSpan)methodInfo.Invoke(null, (object[])parameters[closureTemp]);
+                timeSpan = (TimeSpan)methodInfo.Invoke(null, parameters);
             });
             
             plot.Add(timeSpan.TotalMilliseconds);
@@ -52,24 +79,16 @@ public class Calculator
 
     private object[] GenerateParameters(MethodInfo methodInfo, int size)
     {
-        var parameters = new object[size];
-
         if (methodInfo.DeclaringType == typeof(TestingMethods))
         {
-            for (var i = 0; i < size; i++)
-            {
-                parameters[i] = new object[] { GenerateArray(i + 1), i + 1 };
-            }
+            
+            return new object[] { GenerateArray(size + 1), size + 1 };
+            
         }
         else
         {
-            for (var i = 0; i < size; i++)
-            {
-                parameters[i] = new object[] { GenerateMatrix(size), GenerateMatrix(size), i + 1 };
-            }
+            return new object[] { GenerateMatrix(size + 1), GenerateMatrix(size + 1), size + 1 };
         }
-
-        return parameters;
     }
 
     private int[] GenerateArray(int size)
