@@ -15,13 +15,18 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button x:Name="BtnCalculate" Content="Click Me" 
                     Command="{Binding CalculateCommand}"/>
-            <TextBox Width="100" Text="{Binding Path=IterationsBeforeUpdate}"></TextBox>
+            <ComboBox x:Name="Complexities" ItemsSource="{Binding Path=TimeComplexities}"
+                      DisplayMemberPath="Name" SelectedItem="{Binding SelectedComplexity}"/>
             <ComboBox x:Name="Methods" ItemsSource="{Binding Path=Methods}"
                       DisplayMemberPath="Name" SelectedItem="{Binding SelectedMethod}"/>
+            <TextBlock Margin="10 0 0 0 ">Maximum size</TextBlock>
+            <TextBox Text="{Binding Size}"/>
+            <TextBlock Margin="10 0 0 0 ">Single operation time</TextBlock>
+            <TextBox Text="{Binding Time}"/>
+            <CheckBox IsChecked="{Binding MaxPerformance}" Content="Maximum performance"/>
         </StackPanel>
         <wpf:CartesianChart Grid.Row="1" Series="{Binding TimePlot.Series}" 
                             Title="{Binding TimePlot.Title}"
-                            SyncContext="{Binding TimePlot.Sync}"
-                            ZoomMode="Both"/>
+                            SyncContext="{Binding TimePlot.Sync}"/>
     </Grid>
 </Window>
