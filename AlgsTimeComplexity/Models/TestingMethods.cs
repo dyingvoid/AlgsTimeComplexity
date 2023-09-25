@@ -216,17 +216,6 @@ public static class TestingMethods
         return f;
     }
 
-    //не доделал
-    public static TimeSpan TimSort(List<int> list, int size)
-    {
-
-        var watch = Stopwatch.StartNew();
-        var result = TimSortArray(list);
-        watch.Stop();
-
-        return watch.Elapsed;
-    }
-    //не доделал
     private static int CalcMinRun(int length)
     {
         int r = 0;
@@ -238,101 +227,112 @@ public static class TestingMethods
         return length + r;
     }
 
-    private static List<int> InsertionSortArray(List<int> list, int left, int right)
+    private static void InsertionSort(int[] arr, int left, int right)
     {
-        var cpList = new List<int>(list);
         int temp;
         for (int i = left + 1; i < right + 1; i++)
         {
             int j = i;
-            while (j > left && cpList[j] < cpList[j - 1])
+            while (j > left && arr[j] < arr[j - 1])
             {
-                temp = cpList[j];
-                cpList[j] = cpList[j - 1];
-                cpList[j - 1] = temp;
+                temp = arr[j];
+                arr[j] = arr[j - 1];
+                arr[j - 1] = temp;
                 j--;
             }
         }
-        return cpList;
     }
-    //не доделал
-    private static void Merge(List<int> list, int left, int middle, int right)
+
+    private static void Merge(int[] arr, int left, int middle, int right)
     {
-        int len1 = middle - left + 1, len2 = right - middle, i;
+        int len1 = middle - left + 1;
+        int len2 = right - middle;
+        int i;
         int[] leftArr = new int[len1];
         int[] rightArr = new int[len2];
         for (i = 0; i < len1; i++)
-        {
-            leftArr[i] = list[left + i];
-        }
+            leftArr[i] = arr[left + i];
         for (i = 0; i < len2; i++)
-        {
-            rightArr[i] = list[middle + 1 + i];
-        }
-
-        int j = 0, k = left;
+            rightArr[i] = arr[middle + 1 + i];
+        int j = 0;
+        int k = left;
         i = 0;
         while (i < len1 && j < len2)
         {
             if (leftArr[i] <= rightArr[j])
             {
-                list[k] = leftArr[i];
+                arr[k] = leftArr[i];
                 i++;
             }
             else
             {
-                list[k] = rightArr[j];
+                arr[k] = rightArr[j];
                 j++;
             }
-
             k++;
         }
         while (i < len1)
         {
-            list[k] = leftArr[i];
+            arr[k] = leftArr[i];
             k++;
             i++;
         }
         while (j < len2)
         {
-            list[k] = rightArr[j];
+            arr[k] = rightArr[j];
             k++;
             j++;
         }
     }
-    //не доделал
-    private static List<int> TimSortArray(List<int> list)
+
+    private static int[] TimSortArray(int[] arr)
     {
-        var cpList = new List<int>(list);
-        int minRun = CalcMinRun(cpList.Count);
-
-        for (int start = 0; start < cpList.Count; start += minRun)
+        int minRun = CalcMinRun(arr.Length);
+        for (int start = 0; start < arr.Length; start += minRun)
         {
-            int end = Math.Min(start + minRun - 1, cpList.Count - 1);
-            InsertionSortArray(cpList, start, end);
+            int end = Math.Min(start + minRun - 1, arr.Length - 1);
+            InsertionSort(arr, start, end);
         }
-
         int size = minRun;
-
-        while (size < cpList.Count)
+        while (size < arr.Length)
         {
-            for (int left = 0; left < cpList.Count; left += 2 * size)
+            for (int left = 0; left < arr.Length; left += 2 * size)
             {
-                int middle = Math.Min(cpList.Count - 1, left + size - 1);
-                int right = Math.Min(left + 2 * size - 1, cpList.Count - 1);
+                int middle = Math.Min(arr.Length - 1, left + size - 1);
+                int right = Math.Min(left + 2 * size - 1, arr.Length - 1);
                 if (middle < right)
-                {
-                    Merge(cpList, left, middle, right);
-                }
+                    Merge(arr, left, middle, right);
             }
-
             size *= 2;
         }
-
-        return cpList;
+        return arr;
     }
 
-    public static TimeSpan InsertionSort(List<int> list, int size)
+    public static TimeSpan TimSort(int[] list, int size)
+    {
+        var watch = Stopwatch.StartNew();
+        var result = TimSortArray(list);
+        return watch.Elapsed;
+    }
+
+    private static int[] InsertionSortArray(int[] list, int left, int right)
+    {
+        int temp;
+        for (int i = left + 1; i < right + 1; i++)
+        {
+            int j = i;
+            while (j > left && list[j] < list[j - 1])
+            {
+                temp = list[j];
+                list[j] = list[j - 1];
+                list[j - 1] = temp;
+                j--;
+            }
+        }
+        return list;
+    }
+
+    public static TimeSpan InsertionSort(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
         var result = InsertionSortArray(list, 0, size - 1);
@@ -341,19 +341,52 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
-    public static TimeSpan LinearSearch(List<int> list, int size)
+    public static TimeSpan LinearSearch(int[] list, int size)
     {
-        var cpList = new List<int>(list);
         Random random = new();
         int searchValue = random.Next(0, 100);
         int index = default;
-
         var watch = Stopwatch.StartNew();
-        for (int i = 0; i < cpList.Count; i++)
+        for (int i = 0; i < list.Length; i++)
         {
-            if (cpList[i] == searchValue)
+            if (list[i] == searchValue)
                 index = i;
         }
         return watch.Elapsed;
+    }
+
+    public static TimeSpan CountingSort(int[] list, int size)
+    {
+        var watch = Stopwatch.StartNew();
+        var result = CountingSortArray(list, size);
+        return watch.Elapsed;
+    }
+
+    private static int GetMaxVal(int[] arr, int size)
+    {
+        var maxVal = arr[0];
+        for (int i = 1; i < size; i++)
+            if (arr[i] > maxVal) maxVal = arr[i];
+        return maxVal;
+    }
+
+    private static int[] CountingSortArray(int[] arr, int size)
+    {
+        var maxElement = GetMaxVal(arr, size);
+        var occurrences = new int[maxElement + 1];
+        for (int i = 0; i < maxElement + 1; i++)
+            occurrences[i] = 0;
+        for (int i = 0; i < size; i++)
+            occurrences[arr[i]]++;
+        for (int i = 0, j = 0; i <= maxElement; i++)
+        {
+            while (occurrences[i] > 0)
+            {
+                arr[j] = i;
+                j++;
+                occurrences[i]--;
+            }
+        }
+        return arr;
     }
 }
