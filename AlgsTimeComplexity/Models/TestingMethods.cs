@@ -151,8 +151,8 @@ public static class TestingMethods
         if (power == 0)
             return 1;
         if (number % 2 == 0)
-        {
-           m = Recursive(number, power / 2);
+        { 
+            m = Recursive(number, power / 2);
             return m * m;
         }
 

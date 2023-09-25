@@ -37,7 +37,7 @@ public class Calculator
         }
     }
 
-    private async void CalculateExperimentTimeParallel(int size, MethodInfo methodInfo, ObservableCollection<double> plot)
+    private void CalculateExperimentTimeParallel(int size, MethodInfo methodInfo, ObservableCollection<double> plot)
     {
         var parameters = Enumerable.Range(1, size);
 
@@ -64,7 +64,6 @@ public class Calculator
     {
         for (var i = 0; i < size; i++)
         {
-            var closureTemp = i;
             TimeSpan timeSpan = TimeSpan.Zero;
             var parameters = GenerateParameters(methodInfo, i);
             

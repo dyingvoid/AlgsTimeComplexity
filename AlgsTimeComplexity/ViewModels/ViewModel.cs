@@ -23,7 +23,7 @@ public class ViewModel : ObservableObject
     
     public RelayCommand CalculateCommand { get; set; }
 
-    public int Size { get; set; } = 1000;
+    public int Size { get; set; } = 500;
 
     public double Time { get; set; } = 0.00005;
 
@@ -49,12 +49,7 @@ public class ViewModel : ObservableObject
             SelectedComplexity = TimeComplexities[0];
         
         CalculateCommand = new RelayCommand(
-            execute => Execute());
-    }
-
-    private void Execute()
-    {
-        Calculator.Calculate(Size, Time,
-            SelectedMethod, SelectedComplexity, TimePlot, MaxPerformance);
+            execute => Calculator.Calculate(Size, Time,
+                SelectedMethod, SelectedComplexity, TimePlot, MaxPerformance));
     }
 }
