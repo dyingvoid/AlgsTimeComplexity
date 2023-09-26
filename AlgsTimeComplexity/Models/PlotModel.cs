@@ -19,6 +19,22 @@ public class PlotModel<T>
     
     public object Sync { get; } = new object();
 
+    public Axis[] XAxes { get; set; } =
+    {
+        new Axis
+        {
+            Name = "Number of elements",
+        }
+    };
+    
+    public Axis[] YAxes { get; set; } =
+    {
+        new Axis
+        {
+            Name = "Time, milliseconds(ms)",
+        }
+    };
+
     public PlotModel(ObservableCollection<T> list)
     {
         List = list;

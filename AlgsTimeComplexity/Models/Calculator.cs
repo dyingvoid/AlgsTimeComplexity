@@ -16,15 +16,12 @@ public class Calculator
         if (plot.List.Count != 0 || plot.Approximation.Count != 0)
         {
             plot.List.Clear();
-            //plot.Approximation.Clear();
         }
         
         if(maxPerformance)
             CalculateExperimentTimeParallel(size, testMethod, plot.List);
         else
             CalculateExperimentTime(size, testMethod, plot.List);
-        
-        //CalculateApproximation(size, time, approximationMethod, plot.Approximation);
     }
 
     public void CalculateApproximation(int size, double time, 

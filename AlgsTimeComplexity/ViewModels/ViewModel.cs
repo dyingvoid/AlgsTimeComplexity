@@ -45,6 +45,7 @@ public class ViewModel : ObservableObject
         get => _time;
         set
         {
+            _time = value;
             CalculateApproximation();
         } 
     }

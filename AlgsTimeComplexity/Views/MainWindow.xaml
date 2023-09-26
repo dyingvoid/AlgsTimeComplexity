@@ -27,6 +27,8 @@
         </StackPanel>
         <wpf:CartesianChart Grid.Row="1" Series="{Binding TimePlot.Series}" 
                             Title="{Binding TimePlot.Title}"
-                            SyncContext="{Binding TimePlot.Sync}"/>
+                            SyncContext="{Binding TimePlot.Sync}"
+                            XAxes="{Binding TimePlot.XAxes}"
+                            YAxes="{Binding TimePlot.YAxes}"/>
     </Grid>
 </Window>
