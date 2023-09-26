@@ -26,6 +26,8 @@
             <CheckBox IsChecked="{Binding MaxPerformance}" Content="Maximum performance"/>
         </StackPanel>
         <wpf:CartesianChart Grid.Row="1" Series="{Binding TimePlot.Series}" 
+                            EasingFunction="{x:Null}"
+                            AnimationsSpeed="0"
                             Title="{Binding TimePlot.Title}"
                             SyncContext="{Binding TimePlot.Sync}"
                             XAxes="{Binding TimePlot.XAxes}"
