@@ -16,7 +16,7 @@ public class Calculator
         if (plot.List.Count != 0 || plot.Approximation.Count != 0)
         {
             plot.List.Clear();
-            plot.Approximation.Clear();
+            //plot.Approximation.Clear();
         }
         
         if(maxPerformance)
@@ -24,10 +24,10 @@ public class Calculator
         else
             CalculateExperimentTime(size, testMethod, plot.List);
         
-        CalculateApproximation(size, time, approximationMethod, plot.Approximation);
+        //CalculateApproximation(size, time, approximationMethod, plot.Approximation);
     }
 
-    private void CalculateApproximation(int size, double time, 
+    public void CalculateApproximation(int size, double time, 
         MethodInfo complexity, ObservableCollection<double> complexityPlot)
     {
         for (var i = 1; i < size; i++)

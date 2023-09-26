@@ -14,18 +14,46 @@ public class ViewModel : ObservableObject
     public PlotModel<double> TimePlot { get; set; }
     
     public List<MethodInfo> TimeComplexities { get; set; }
-    
-    public MethodInfo SelectedComplexity { get; set; }
+
+    private MethodInfo _complexity;
+
+    private int _size = 500;
+
+    private double _time = 0.00005;
+    public MethodInfo SelectedComplexity
+    {
+        get => _complexity;
+        set
+        {
+            _complexity = value;
+            CalculateApproximation();
+        }
+    }
+
+    public int Size
+    {
+        get => _size;
+        set
+        {
+            _size = value;
+            CalculateApproximation();
+        } 
+    }
+
+    public double Time
+    {
+        get => _time;
+        set
+        {
+            CalculateApproximation();
+        } 
+    }
     
     public List<MethodInfo> Methods { get; set; }
     
     public MethodInfo SelectedMethod { get; set; }
     
     public RelayCommand CalculateCommand { get; set; }
-
-    public int Size { get; set; } = 500;
-
-    public double Time { get; set; } = 0.00005;
 
     public bool MaxPerformance { get; set; } = false;
 
@@ -51,5 +79,13 @@ public class ViewModel : ObservableObject
         CalculateCommand = new RelayCommand(
             execute => Calculator.Calculate(Size, Time,
                 SelectedMethod, SelectedComplexity, TimePlot, MaxPerformance));
+    }
+
+    private void CalculateApproximation()
+    {
+        if(TimePlot.Approximation.Count > 0)
+            TimePlot.Approximation.Clear();
+        
+        Calculator.CalculateApproximation(Size, Time, _complexity, TimePlot.Approximation);
     }
 }

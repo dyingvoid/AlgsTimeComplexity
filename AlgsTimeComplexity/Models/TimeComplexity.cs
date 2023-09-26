@@ -28,4 +28,9 @@ public static class TimeComplexity
     {
         return singleTime * size * size;
     }
+
+    public static double Pow3(double singleTime, int size)
+    {
+        return singleTime * Math.Pow(size, 3);
+    }
 }
