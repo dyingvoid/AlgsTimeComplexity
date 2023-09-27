@@ -120,6 +120,20 @@ public static class TestingMethods
         return watch.Elapsed;
     }
 
+    public static TimeSpan Straight(int[] arr, int size)
+    {
+        double result = arr[0];
+
+        var watch = Stopwatch.StartNew();
+        for (int i = 1; i < size; i++)
+        {
+            result += arr[i] * Math.Pow(1.5, i - 1);
+        }
+        watch.Stop();
+
+        return watch.Elapsed;
+    }
+
     public static TimeSpan SimplePow(int[] list, int size)
     {
         var element = list[size - 1];

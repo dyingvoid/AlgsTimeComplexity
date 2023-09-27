@@ -10,12 +10,12 @@ namespace AlgsTimeComplexity.Models;
 
 public class Calculator
 {
-    public void Calculate(int size, double time, 
-        MethodInfo testMethod, MethodInfo approximationMethod, PlotModel<double> plot, bool maxPerformance)
+    public void Calculate(int size, MethodInfo testMethod, PlotModel<double> plot, bool maxPerformance)
     {
         if (plot.List.Count != 0 || plot.Approximation.Count != 0)
         {
             plot.List.Clear();
+            plot.Approximation.Clear();
         }
         
         if(maxPerformance)
@@ -45,7 +45,7 @@ public class Calculator
             .WithMergeOptions(ParallelMergeOptions.NotBuffered)
             .Select(i =>
             {
-                var param = GenerateParameters(methodInfo, i);
+                var param = Generator.GenerateParameters(methodInfo, i);
                 return ((TimeSpan)methodInfo.Invoke(null, param)).TotalMilliseconds;
             })
             .AsEnumerable();
@@ -62,7 +62,7 @@ public class Calculator
         for (var i = 0; i < size; i++)
         {
             TimeSpan timeSpan = TimeSpan.Zero;
-            var parameters = GenerateParameters(methodInfo, i);
+            var parameters = Generator.GenerateParameters(methodInfo, i);
             
             await Task.Run(() =>
             {
@@ -71,40 +71,5 @@ public class Calculator
             
             plot.Add(timeSpan.TotalMilliseconds);
         }
-    }
-
-    private object[] GenerateParameters(MethodInfo methodInfo, int size)
-    {
-        if (methodInfo.DeclaringType == typeof(TestingMethods))
-        {
-            
-            return new object[] { GenerateArray(size + 1), size + 1 };
-            
-        }
-        else
-        {
-            return new object[] { GenerateMatrix(size + 1), GenerateMatrix(size + 1), size + 1 };
-        }
-    }
-
-    private int[] GenerateArray(int size)
-    {
-        var arr = new int[size];
-        var random = new Random();
-
-        for (var i = 0; i < size; i++)
-            arr[i] = random.Next(0, 1000);
-
-        return arr;
-    }
-
-    private int[][] GenerateMatrix(int size)
-    {
-        var matrix = new int[size][];
-
-        for (var i = 0; i < size; i++)
-            matrix[i] = GenerateArray(size);
-
-        return matrix;
     }
 }
