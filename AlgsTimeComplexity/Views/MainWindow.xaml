@@ -15,8 +15,14 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button x:Name="BtnCalculate" Content="Click Me" 
                     Command="{Binding CalculateCommand}"/>
-            <ComboBox x:Name="Methods" ItemsSource="{Binding Path=Methods}"
-                      DisplayMemberPath="Name" SelectedItem="{Binding SelectedMethod}"/>
+            <ComboBox x:Name="Methods"
+                      ItemsSource="{Binding Methods}"
+                      SelectedItem="{Binding SelectedMethod}"
+                      DisplayMemberPath="Name" />
+            <ComboBox x:Name="Complexities" 
+                      ItemsSource="{Binding Complexities}" 
+                      SelectedItem="{Binding SelectedComplexity}"
+                      DisplayMemberPath="Name"/>
             <TextBlock Margin="10 0 0 0 ">Maximum size</TextBlock>
             <TextBox Text="{Binding Size}"/>
             <CheckBox IsChecked="{Binding MaxPerformance}" Content="Maximum performance"/>

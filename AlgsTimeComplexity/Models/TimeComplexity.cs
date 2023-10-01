@@ -4,33 +4,33 @@ namespace AlgsTimeComplexity.Models;
 
 public static class TimeComplexity
 {
-    public static double Const(double singleTime, int size)
+    public static double Const(int size)
     {
-        return singleTime;
+        return 1;
     }
     
-    public static double Linear(double singleTime, int size)
+    public static double Linear(int size)
     {
-        return singleTime * size;
+        return size;
     }
     
-    public static double LogN(double singleTime, int size)
+    public static double LogN(int size)
     {
-        return singleTime * Math.Log(size);
+        return Math.Log(size);
     }
     
-    public static double NLogN(double singleTime, int size)
+    public static double NLogN(int size)
     {
-        return singleTime * size * Math.Log(size);
+        return size * Math.Log(size);
     }
     
-    public static double Square(double singleTime, int size)
+    public static double Square(int size)
     {
-        return singleTime * size * size;
+        return size * size;
     }
 
-    public static double Pow3(double singleTime, int size)
+    public static double Pow3(int size)
     {
-        return singleTime * Math.Pow(size, 3);
+        return Math.Pow(size, 3);
     }
 }

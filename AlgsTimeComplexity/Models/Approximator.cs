@@ -8,11 +8,51 @@ namespace AlgsTimeComplexity.Models;
 
 public static class Approximator
 {
-    public static void Approximate(ObservableCollection<double> list, MethodInfo algorithm, int size, int iterations)
+    public static void Approximate(ObservableCollection<double> list,
+        MethodInfo algorithm, MethodInfo complexity,
+        int size, int iterations)
     {
-        var average = new double[size];
+        var averageTimings = GetAverageTimings(algorithm, size, iterations);
+        var complexityValues = GetComplexityValues(complexity, size);
+
+        MakeRelations(averageTimings, complexityValues);
         
+        var mean = averageTimings.Mean();
+        
+        FillApproximationLine(list, mean, complexityValues);
+    }
+
+    private static void FillApproximationLine(ObservableCollection<double> line, double coefficient,
+        double[] complexityValues)
+    {
+        foreach (var complexityValue in complexityValues)
+        {
+            line.Add(coefficient * complexityValue);
+        }
+    }
+    
+    private static double[] GetComplexityValues(MethodInfo complexity, int size)
+    {
+        var values = new double[size];
+        
+        for (var i = 1; i <= size; i++)
+        {
+            values[i - 1] = GetComplexityValue(complexity, i);
+        }
+
+        return values;
+    }
+
+    private static void MakeRelations(double[] timings, double[] complexityValues)
+    {
+        timings.Divide(complexityValues);
+    }
+
+    private static double[] GetAverageTimings(MethodInfo algorithm, int size, int iterations)
+    {
+        var timings = new double[size];
         var parameters = Enumerable.Range(1, size);
+
         for (var i = 0; i < iterations; i++)
         {
             var results = Partitioner
@@ -27,37 +67,16 @@ public static class Approximator
                 })
                 .ToArray();
 
-            Add(average, results);
+            timings.Add(results);
         }
-        
-        Divide(average, iterations);
-        var av = Average(average);
 
-        for (var i = 1; i <= average.Length; i++)
-        {
-            list.Add(av * i * i);
-        }
+        timings.Divide(iterations);
+
+        return timings;
     }
 
-    private static double Average(double[] arr)
+    private static double GetComplexityValue(MethodInfo complexityFunction, int size)
     {
-        var s = arr.Sum();
-        return s / arr.Length;
-    }
-
-    private static void Divide(double[] arr, int number)
-    {
-        for (var i = 0; i < arr.Length; i++)
-        {
-            arr[i] /= number;
-        }
-    }
-
-    private static void Add(double[] l, double[] r)
-    {
-        for (var i = 0; i < l.Length; i++)
-        {
-            l[i] += r[i];
-        }
+        return (double)complexityFunction.Invoke(null, new object?[] { size });
     }
 }
