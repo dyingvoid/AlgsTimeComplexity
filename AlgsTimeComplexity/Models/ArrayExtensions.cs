@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace AlgsTimeComplexity.Models;
 
@@ -38,5 +39,22 @@ public static class ArrayExtensions
         {
             l[i] += r[i];
         }
+    }
+
+    public static T[][] Split<T>(this T[] arr, int maxSizeBatch)
+    {
+        var numberOfParts = arr.Length % maxSizeBatch == 0 ? 
+            arr.Length / maxSizeBatch : 
+            arr.Length / maxSizeBatch + 1;
+        
+        var split = new T[numberOfParts][]; 
+        
+        for (var i = 0; i < numberOfParts; i++)
+        {
+            var numberOfElements = Math.Min(maxSizeBatch, arr.Length - i * maxSizeBatch);
+            split[i] = arr.Skip(i * maxSizeBatch).Take(numberOfElements).ToArray();
+        }
+
+        return split;
     }
 }

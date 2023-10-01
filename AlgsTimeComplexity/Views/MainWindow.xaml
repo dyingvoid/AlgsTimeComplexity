@@ -13,7 +13,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button x:Name="BtnCalculate" Content="Click Me" 
+            <Button x:Name="BtnCalculate" Content="Calculate" 
                     Command="{Binding CalculateCommand}"/>
             <ComboBox x:Name="Methods"
                       ItemsSource="{Binding Methods}"
@@ -23,9 +23,14 @@
                       ItemsSource="{Binding Complexities}" 
                       SelectedItem="{Binding SelectedComplexity}"
                       DisplayMemberPath="Name"/>
+            <TextBlock Margin="10 0 0 0 ">Number of iterations:</TextBlock>
+            <TextBox Text="{Binding Iterations}"/>
             <TextBlock Margin="10 0 0 0 ">Maximum size</TextBlock>
             <TextBox Text="{Binding Size}"/>
             <CheckBox IsChecked="{Binding MaxPerformance}" Content="Maximum performance"/>
+            <Button Margin="10 0 0 0 " Command="{Binding FilterCommand}" Content="Filter"></Button>
+            <TextBlock Margin="10 0 0 0">Percentile:</TextBlock>
+            <TextBox Text="{Binding Percentile}"/>
         </StackPanel>
         <wpf:CartesianChart Grid.Row="1" Series="{Binding TimePlot.Series}" 
                             Title="{Binding TimePlot.Title}"

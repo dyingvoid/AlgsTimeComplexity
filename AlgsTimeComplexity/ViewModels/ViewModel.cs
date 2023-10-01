@@ -26,10 +26,18 @@ public class ViewModel : ObservableObject
 
     public RelayCommand CalculateCommand { get; set; }
 
+    public RelayCommand FilterCommand { get; set; }
+
     public bool MaxPerformance { get; set; } = false;
+
+    public int Percentile { get; set; } = 95;
+
+    public int Iterations { get; set; } = 50;
 
     public ViewModel()
     {
+        var filter = new Filter();
+
         Calculator = new Calculator();
         TimePlot = new PlotModel<double>(new ObservableCollection<double>());
 
@@ -47,14 +55,14 @@ public class ViewModel : ObservableObject
             execute =>
             {
                 Calculator.Calculate(Size, SelectedMethod, TimePlot, MaxPerformance);
-                Approximator.Approximate(TimePlot.Approximation, 
-                    SelectedMethod, SelectedComplexity, Size, 100);
+                Approximator.Approximate(TimePlot.Approximation,
+                    SelectedMethod, SelectedComplexity, Size, Iterations);
             });
+        FilterCommand = new RelayCommand(execute => filter.FindPeaks(TimePlot, Percentile));
     }
 
     private MethodInfo[] GetTypeMethods(Type type)
     {
         return type.GetMethods(BindingFlags.Public | BindingFlags.Static);
     }
-
 }
