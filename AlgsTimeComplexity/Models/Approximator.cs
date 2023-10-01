@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 
@@ -55,18 +53,7 @@ public static class Approximator
 
         for (var i = 0; i < iterations; i++)
         {
-            var results = Partitioner
-                .Create(parameters, EnumerablePartitionerOptions.NoBuffering)
-                .AsParallel()
-                .AsOrdered()
-                .WithMergeOptions(ParallelMergeOptions.NotBuffered)
-                .Select(j =>
-                {
-                    var param = Generator.GenerateParameters(algorithm, j);
-                    return ((TimeSpan)algorithm.Invoke(null, param)).TotalMilliseconds;
-                })
-                .ToArray();
-
+            var results = Calculator.CalculateMethod(algorithm, size);
             timings.Add(results);
         }
 

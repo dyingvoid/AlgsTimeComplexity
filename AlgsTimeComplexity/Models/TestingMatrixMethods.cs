@@ -5,7 +5,7 @@ namespace AlgsTimeComplexity.Models;
 
 public static class TestingMatrixMethods
 {
-    public static TimeSpan Product(int[][] m1, int[][] m2, int size)
+    public static double Product(int[][] m1, int[][] m2, int size)
     {
         var emptyMatrix = CreateEmptyMatrix(size);
 
@@ -26,7 +26,7 @@ public static class TestingMatrixMethods
         }
         watch.Stop();
 
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
     private static int[][] CreateEmptyMatrix(int size)

@@ -7,7 +7,7 @@ namespace AlgsTimeComplexity.Models;
 
 public static class TestingMethods
 {
-    public static TimeSpan Const(int[] list, int size)
+    public static double Const(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
         if (list.Length != 0)
@@ -16,10 +16,10 @@ public static class TestingMethods
         }
         watch.Stop();
 
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
     
-    public static TimeSpan Sum(int[] list, int size)
+    public static double Sum(int[] list, int size)
     {
         long sum = 0;
         var watch = Stopwatch.StartNew();
@@ -29,10 +29,10 @@ public static class TestingMethods
         }
         watch.Stop();
 
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
-    public static TimeSpan Product(int[] list, int size)
+    public static double Product(int[] list, int size)
     {
         long sum = 0;
         var watch = Stopwatch.StartNew();
@@ -42,10 +42,10 @@ public static class TestingMethods
         }
         watch.Stop();
 
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
-    public static TimeSpan BubbleSort(int[] list, int size)
+    public static double BubbleSort(int[] list, int size)
     {
         var cpList = new List<int>(list);
 
@@ -63,17 +63,17 @@ public static class TestingMethods
         }
 
         watch.Stop();
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
-    public static TimeSpan QuickSort(int[] list, int size)
+    public static double QuickSort(int[] list, int size)
     {
 
         var watch = Stopwatch.StartNew();
         var result = QuickSortArray(list, 0, size - 1);
         watch.Stop();
 
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
     private static int[] QuickSortArray(int[] list, int lIndex, int rIndex)
@@ -105,7 +105,7 @@ public static class TestingMethods
         return list;
     }
 
-    public static TimeSpan Horner(int[] list, int size)
+    public static double Horner(int[] list, int size)
     {
         double result = list[0];
         var x = 1.5f;
@@ -117,10 +117,10 @@ public static class TestingMethods
         }
         watch.Stop();
 
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
-    public static TimeSpan Straight(int[] arr, int size)
+    public static double Straight(int[] arr, int size)
     {
         double result = arr[0];
 
@@ -131,103 +131,7 @@ public static class TestingMethods
         }
         watch.Stop();
 
-        return watch.Elapsed;
-    }
-
-    public static TimeSpan SimplePow(int[] list, int size)
-    {
-        var element = list[size - 1];
-        
-        var watch = Stopwatch.StartNew();
-        for (int i = 0; i < size; i++)
-        {
-            element *= element;
-        }
-        watch.Stop();
-
-        return watch.Elapsed;
-    }
-
-    public static TimeSpan RecursivePow(int[] list, int size)
-    {
-        var element = list[size - 1];
-        var watch = Stopwatch.StartNew();
-        Recursive(element, size);
-        watch.Stop();
-
-        return watch.Elapsed;
-    }
-
-    private static int Recursive(int number, int power)
-    {
-        int m;
-        
-        if (power == 0)
-            return 1;
-        if (number % 2 == 0)
-        { 
-            m = Recursive(number, power / 2);
-            return m * m;
-        }
-
-        return number * Recursive(number, power - 1);
-    }
-
-    public static TimeSpan QuickPow(int[] list, int size)
-    {
-        var watch = Stopwatch.StartNew();
-        Quick(list[size - 1], size);
-        watch.Stop();
-
-        return watch.Elapsed;
-    }
-
-    private static int Quick(int number, int power)
-    {
-        int f = power % 2 == 1 ? number : 1;
-
-        while (power != 0)
-        {
-            power /= 2;
-            number *= number;
-
-            if (power % 2 == 1)
-                f *= number;
-        }
-
-        return f;
-    }
-
-    public static TimeSpan QuickPow1(int[] list, int size)
-    {
-        var watch = Stopwatch.StartNew();
-        Quick1(list[size - 1], size);
-        watch.Stop();
-
-        return watch.Elapsed;
-    }
-
-    private static int Quick1(int number, int power)
-    {
-        int c = number;
-        int f = 1;
-        int k = power;
-
-        while (k != 0)
-        {
-            if (k % 2 == 0)
-            {
-                c *= c;
-                k /= 2;
-            }
-            else
-            {
-                f *= c;
-                k -= 1;
-            }
-        }
-
-        return f;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
     private static int CalcMinRun(int length)
@@ -322,11 +226,11 @@ public static class TestingMethods
         return arr;
     }
 
-    public static TimeSpan TimSort(int[] list, int size)
+    public static double TimSort(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
         var result = TimSortArray(list);
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
     private static int[] InsertionSortArray(int[] list, int left, int right)
@@ -346,16 +250,16 @@ public static class TestingMethods
         return list;
     }
 
-    public static TimeSpan InsertionSort(int[] list, int size)
+    public static double InsertionSort(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
         var result = InsertionSortArray(list, 0, size - 1);
         watch.Stop();
 
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
-    public static TimeSpan LinearSearch(int[] list, int size)
+    public static double LinearSearch(int[] list, int size)
     {
         Random random = new();
         int searchValue = random.Next(0, 100);
@@ -366,14 +270,14 @@ public static class TestingMethods
             if (list[i] == searchValue)
                 index = i;
         }
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
-    public static TimeSpan CountingSort(int[] list, int size)
+    public static double CountingSort(int[] list, int size)
     {
         var watch = Stopwatch.StartNew();
         var result = CountingSortArray(list, size);
-        return watch.Elapsed;
+        return watch.Elapsed.TotalMilliseconds;
     }
 
     private static int GetMaxVal(int[] arr, int size)

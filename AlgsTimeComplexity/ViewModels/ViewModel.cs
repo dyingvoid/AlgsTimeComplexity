@@ -10,8 +10,6 @@ namespace AlgsTimeComplexity.ViewModels;
 
 public class ViewModel : ObservableObject
 {
-    public Calculator Calculator { get; set; }
-
     public PlotModel<double> TimePlot { get; set; }
 
     public int Size { get; set; } = 200;
@@ -37,12 +35,12 @@ public class ViewModel : ObservableObject
     public ViewModel()
     {
         var filter = new Filter();
-
-        Calculator = new Calculator();
+        
         TimePlot = new PlotModel<double>(new ObservableCollection<double>());
 
         Methods = GetTypeMethods(typeof(TestingMethods)).ToList();
         Methods.AddRange(GetTypeMethods(typeof(TestingMatrixMethods)));
+        Methods.AddRange(GetTypeMethods(typeof(SecondTaskTestingMethods)));
 
         Complexities = GetTypeMethods(typeof(TimeComplexity)).ToList();
 
@@ -54,7 +52,7 @@ public class ViewModel : ObservableObject
         CalculateCommand = new RelayCommand(
             execute =>
             {
-                Calculator.Calculate(Size, SelectedMethod, TimePlot, MaxPerformance);
+                Calculator.Calculate(Size, SelectedMethod, TimePlot);
                 Approximator.Approximate(TimePlot.Approximation,
                     SelectedMethod, SelectedComplexity, Size, Iterations);
             });

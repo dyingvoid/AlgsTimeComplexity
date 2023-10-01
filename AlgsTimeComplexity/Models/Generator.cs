@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Reflection;
 
 namespace AlgsTimeComplexity.Models;
@@ -7,16 +8,12 @@ public static class Generator
 {
     public static object[] GenerateParameters(MethodInfo methodInfo, int size)
     {
-        if (methodInfo.DeclaringType == typeof(TestingMethods))
-        {
-            
-            return new object[] { GenerateArray(size + 1), size + 1 };
-            
-        }
-        else
-        {
+        var declaringType = methodInfo.DeclaringType;
+        
+        if (declaringType == typeof(TestingMatrixMethods))
             return new object[] { GenerateMatrix(size + 1), GenerateMatrix(size + 1), size + 1 };
-        }
+        
+        return new object[] { GenerateArray(size + 1), size + 1 };
     }
 
     private static int[] GenerateArray(int size)

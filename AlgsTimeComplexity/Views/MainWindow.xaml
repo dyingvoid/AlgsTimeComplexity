@@ -36,6 +36,7 @@
                             Title="{Binding TimePlot.Title}"
                             SyncContext="{Binding TimePlot.Sync}"
                             XAxes="{Binding TimePlot.XAxes}"
-                            YAxes="{Binding TimePlot.YAxes}"/>
+                            YAxes="{Binding TimePlot.YAxes}"
+                            TooltipPosition="Hidden"/>
     </Grid>
 </Window>
