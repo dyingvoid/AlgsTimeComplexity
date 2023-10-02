@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reflection;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -7,7 +9,7 @@ using SkiaSharp;
 
 namespace AlgsTimeComplexity.Models;
 
-public class PlotModel<T>
+public class PlotModel<T> : ObservableObject
 {
     public ISeries[] Series { get; set; }
     
@@ -26,19 +28,25 @@ public class PlotModel<T>
             Name = "Number of elements",
         }
     };
+
+    private Axis[] _yAxes;
     
-    public Axis[] YAxes { get; set; } =
+    public Axis[] YAxes
     {
-        new Axis
+        get => _yAxes;
+        set
         {
-            Name = "Time, milliseconds(ms)",
-        }
-    };
+            _yAxes = value;
+            SetProperty(ref _yAxes, value);
+            OnPropertyChanged();
+        } 
+    }
 
     public PlotModel(ObservableCollection<T> list)
     {
         List = list;
         Approximation = new ObservableCollection<T>();
+        YAxes = new[] { new Axis { Name = "Time, milliseconds(ms)" } };
         
         Series = new ISeries[]{
             new LineSeries<T>
@@ -64,5 +72,14 @@ public class PlotModel<T>
             Padding = new LiveChartsCore.Drawing.Padding(15),
             Paint = new SolidColorPaint(SKColors.DarkSlateGray)
         };
+    }
+
+    public void ChangeYAxesName(MethodInfo method)
+    {
+        string name;
+        name = method.DeclaringType == typeof(SecondTaskTestingMethods) ? 
+            "Number of operations." : "Time, milliseconds(ms)";
+       
+        YAxes = new[] { new Axis { Name = name } };
     }
 }

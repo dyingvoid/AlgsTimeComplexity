@@ -27,7 +27,6 @@
             <TextBox Text="{Binding Iterations}"/>
             <TextBlock Margin="10 0 0 0 ">Maximum size</TextBlock>
             <TextBox Text="{Binding Size}"/>
-            <CheckBox IsChecked="{Binding MaxPerformance}" Content="Maximum performance"/>
             <Button Margin="10 0 0 0 " Command="{Binding FilterCommand}" Content="Filter"></Button>
             <TextBlock Margin="10 0 0 0">Percentile:</TextBlock>
             <TextBox Text="{Binding Percentile}"/>

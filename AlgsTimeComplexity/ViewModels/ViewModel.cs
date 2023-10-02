@@ -26,8 +26,6 @@ public class ViewModel : ObservableObject
 
     public RelayCommand FilterCommand { get; set; }
 
-    public bool MaxPerformance { get; set; } = false;
-
     public int Percentile { get; set; } = 95;
 
     public int Iterations { get; set; } = 50;
@@ -52,6 +50,7 @@ public class ViewModel : ObservableObject
         CalculateCommand = new RelayCommand(
             execute =>
             {
+                TimePlot.ChangeYAxesName(SelectedMethod);
                 Calculator.Calculate(Size, SelectedMethod, TimePlot);
                 Approximator.Approximate(TimePlot.Approximation,
                     SelectedMethod, SelectedComplexity, Size, Iterations);
