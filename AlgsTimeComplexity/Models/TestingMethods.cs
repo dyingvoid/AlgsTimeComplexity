@@ -307,4 +307,42 @@ public static class TestingMethods
         }
         return arr;
     }
+
+    public static double Pi(int[] arr, int size)
+    {
+        double sum = 0;
+        long d = 1;
+        
+        var watch = Stopwatch.StartNew();
+        for (var i = 0; i < size; i++)
+        {
+            if (i % 2 == 0)
+                sum += 4 / d;
+            else
+                sum -= 4 / d;
+
+            d += 2;
+        }
+        watch.Stop();
+
+        return watch.Elapsed.TotalMilliseconds;
+    }
+    
+    public static double Pi2(int[] arr, int size)
+    {
+        double sum = 3;
+        long n = 2;
+        int sign = 1;
+        
+        var watch = Stopwatch.StartNew();
+        for (var i = 0; i < size; i++)
+        {
+            sum += sign * (4 / ((n) * (n + 1) * (n + 2)));
+            sign *= -1;
+            n += 2;
+        }
+        watch.Stop();
+
+        return watch.Elapsed.TotalMilliseconds;
+    }
 }

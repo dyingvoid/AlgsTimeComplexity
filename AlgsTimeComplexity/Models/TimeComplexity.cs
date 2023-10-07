@@ -33,4 +33,20 @@ public static class TimeComplexity
     {
         return Math.Pow(size, 3);
     }
+
+    public static double NLogNLogLogN(int size)
+    {
+        var val = size * LogN(size) * Math.Log(LogN(size));
+        if (val is float.NaN)
+            return 0;
+        return val;
+    }
+    
+    public static double NLogNLogN(int size)
+    {
+        var val = size * LogN(size) * LogN(size);
+        if (val is float.NaN)
+            return 0;
+        return val;
+    }
 }
